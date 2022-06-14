@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    ports:
+      - 1433:1433
+    environment:
+      - SA_PASSWORD=Password12!
+      - SA_USERNAME=sa
+      - ACCEPT_EULA=Y
+  keycloak:
+    build: ./kc/
+    depends_on:
+      - sqlserver
+    ports:
+      - 8443:8443
+    environment:
+      - KC_DB_URL_HOST=sqlserver
+      - KC_DB_USERNAME=sa
+      - KC_DB_PASSWORD=Password12!
+      - KC_DB_URL_DATABASE=master
+      - KC_HOSTNAME=localhost
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
